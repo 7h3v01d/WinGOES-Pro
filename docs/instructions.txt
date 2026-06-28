@@ -1,0 +1,8 @@
+How to run
+# GUI (default)
+python win_rebuild_gui.py
+
+# CLI
+python win_rebuild_gui.py --cli capture --bundle X:\bundle --mode CLEAN_REBUILD --dry-run
+python win_rebuild_gui.py --cli apply   --bundle X:\bundle --mode CLEAN_REBUILD --dry-run
+python win_rebuild_gui.py --cli verify  --bundle X:\bundle --mode CLEAN_REBUILD --dry-run
