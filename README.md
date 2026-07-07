@@ -191,7 +191,7 @@ Flat controls, zero border-radius, monospace throughout.
 
 Copyright © 2026 Leon Priest (7h3v01d)
 
-Licensed under the [Apache License 2.0](LICENSE).
+Licensed under the [PETL v1.0](LICENSE).
 
 ---
 
