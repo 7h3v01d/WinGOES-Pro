@@ -1,4 +1,4 @@
-# gui_app.py  —  WinGOES Pro 2.0
+# gui_app.py  —  WinGOES Pro 2.1
 # Professional retail GUI — PyQt6
 from __future__ import annotations
 
@@ -35,71 +35,71 @@ APP_TITLE = f"{APP_NAME} {APP_VERSION}"
 
 # ── Stylesheet ─────────────────────────────────────────────────────────────────
 
-LIGHT_STYLE = """
+THEME_STYLE = """
 /* ══════════════════════════════════════════════════════
-   WinGOES Pro 2.0  —  Dark Industrial Theme
-   Palette:
-     Base:       #0d1117  (near-black)
-     Surface:    #161b22  (dark card)
-     Surface2:   #1c2330  (raised panel)
-     Surface3:   #21262d  (input bg)
-     Border:     #30363d  (subtle border)
-     BorderHi:   #484f58  (active border)
-     Accent:     #38bdf8  (sky blue)
-     AccentDim:  #0ea5e9
-     Success:    #3fb950  (green)
-     Warning:    #d29922  (amber)
-     Danger:     #f85149  (red)
-     Purple:     #a371f7
-     Text:       #e6edf3  (primary)
-     TextMuted:  #8b949e  (secondary)
-     TextDim:    #484f58  (disabled)
+   WinGOES Pro 2.1  —  Dark Industrial Theme
+   Signature palette (7h3v01d):
+     Base:       #0b0f14  (obsidian)
+     Surface:    #10151c  (panel)
+     Surface2:   #141a22  (raised)
+     Surface3:   #171e27  (input bg)
+     Hairline:   #232b35  (steel, 1px)
+     HairlineHi: #3a4655  (active)
+     Accent:     #2fd6c3  (teal)
+     AccentDim:  #1fa896
+     Success:    #4be08a  (phosphor)
+     Warning:    #ffb454  (amber)
+     Danger:     #ff5c66  (red)
+     Text:       #d7e0ea  (primary)
+     TextMuted:  #7d8a99  (secondary)
+     TextDim:    #46525f  (disabled)
+   Rules: flat, zero-radius, monospace, 1px steel hairlines.
    ══════════════════════════════════════════════════════ */
 
 QWidget {
-    background-color: #161b22;
-    color: #e6edf3;
-    font-family: "Segoe UI", "Arial", sans-serif;
+    background-color: #10151c;
+    color: #d7e0ea;
+    font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
     font-size: 13px;
 }
-QMainWindow { background-color: #0d1117; }
+QMainWindow { background-color: #0b0f14; }
 
 /* ── Sidebar (left panel) ── */
 #sidebar {
-    background-color: #161b22;
-    border-right: 1px solid #30363d;
+    background-color: #10151c;
+    border-right: 1px solid #232b35;
 }
 
 /* ── Brand header inside sidebar ── */
 #brandBlock {
-    background-color: #0d1117;
+    background-color: #0b0f14;
     padding: 20px 16px 16px 16px;
-    border-bottom: 1px solid #30363d;
+    border-bottom: 1px solid #232b35;
 }
 #brandTitle {
-    color: #e6edf3;
+    color: #d7e0ea;
     font-size: 18px;
     font-weight: bold;
-    letter-spacing: 1px;
-}
-#brandSub {
-    color: #8b949e;
-    font-size: 10px;
     letter-spacing: 2px;
 }
+#brandSub {
+    color: #7d8a99;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
 #brandVersion {
-    color: #38bdf8;
+    color: #2fd6c3;
     font-size: 10px;
     font-weight: 600;
     padding: 1px 7px;
-    border: 1px solid #0ea5e9;
-    border-radius: 8px;
-    background: #0c1a26;
+    border: 1px solid #1fa896;
+    border-radius: 0px;
+    background: #0c1a18;
 }
 
 /* ── Sidebar section labels ── */
 #sideLabel {
-    color: #484f58;
+    color: #46525f;
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -108,30 +108,30 @@ QMainWindow { background-color: #0d1117; }
 
 /* ── Sidebar checkboxes ── */
 #sidebar QCheckBox {
-    color: #c9d1d9;
+    color: #b7c2ce;
     font-size: 12px;
     spacing: 8px;
     padding: 4px 16px;
 }
-#sidebar QCheckBox:disabled { color: #30363d; }
+#sidebar QCheckBox:disabled { color: #232b35; }
 #sidebar QCheckBox::indicator {
     width: 14px; height: 14px;
-    border: 1px solid #484f58;
-    border-radius: 3px;
-    background: #0d1117;
+    border: 1px solid #3a4655;
+    border-radius: 0px;
+    background: #0b0f14;
 }
 #sidebar QCheckBox::indicator:checked {
-    background: #0ea5e9;
-    border-color: #38bdf8;
+    background: #2fd6c3;
+    border-color: #2fd6c3;
 }
 #sidebar QCheckBox::indicator:disabled {
-    background: #161b22;
-    border-color: #30363d;
+    background: #10151c;
+    border-color: #232b35;
 }
 
 /* ── Info labels inside sidebar ── */
 #sideInfo {
-    color: #d29922;
+    color: #ffb454;
     font-size: 11px;
     padding: 3px 16px;
     font-style: italic;
@@ -139,94 +139,94 @@ QMainWindow { background-color: #0d1117; }
 
 /* ── Main content area ── */
 #mainArea {
-    background-color: #0d1117;
+    background-color: #0b0f14;
 }
 
 /* ── Top toolbar strip ── */
 #toolbar {
-    background-color: #161b22;
-    border-bottom: 1px solid #30363d;
+    background-color: #10151c;
+    border-bottom: 1px solid #232b35;
     min-height: 56px;
     max-height: 56px;
 }
 
 /* ── Bundle path row ── */
 #bundleRow {
-    background: #21262d;
-    border: 1px solid #30363d;
-    border-radius: 6px;
+    background: #171e27;
+    border: 1px solid #232b35;
+    border-radius: 0px;
     padding: 4px 8px;
-    color: #e6edf3;
+    color: #d7e0ea;
 }
 
 /* ── Arrow labels ── */
-#wfArrow { color: #30363d; font-size: 16px; padding: 0 2px; }
+#wfArrow { color: #232b35; font-size: 16px; padding: 0 2px; }
 
 /* ── Generic QPushButton — must come BEFORE named overrides ── */
 QPushButton {
-    background-color: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
-    border-radius: 6px;
+    background-color: #141a22;
+    color: #b7c2ce;
+    border: 1px solid #232b35;
+    border-radius: 0px;
     padding: 7px 16px;
     font-weight: 500;
 }
 QPushButton:hover {
-    background-color: #2d333b;
-    border-color: #484f58;
-    color: #e6edf3;
+    background-color: #1a222c;
+    border-color: #3a4655;
+    color: #d7e0ea;
 }
-QPushButton:pressed { background-color: #161b22; border-color: #484f58; }
-QPushButton:disabled { color: #484f58; border-color: #21262d; background: #161b22; }
+QPushButton:pressed { background-color: #0b0f14; border-color: #3a4655; }
+QPushButton:disabled { color: #46525f; border-color: #141a22; background: #10151c; }
 
 /* ── Primary action buttons — after generic so they override ── */
 QPushButton#btnCapture {
-    background-color: #0ea5e9;
-    color: #0d1117;
-    border: 1px solid #0ea5e9;
-    border-radius: 6px;
+    background-color: #2fd6c3;
+    color: #0b0f14;
+    border: 1px solid #2fd6c3;
+    border-radius: 0px;
     font-weight: 700;
     font-size: 13px;
     padding: 10px 28px;
 }
 QPushButton#btnCapture:hover {
-    background-color: #38bdf8;
-    border-color: #38bdf8;
-    color: #0d1117;
+    background-color: #5ce4d4;
+    border-color: #5ce4d4;
+    color: #0b0f14;
 }
-QPushButton#btnCapture:pressed { background-color: #0284c7; color: #e6edf3; }
-QPushButton#btnCapture:disabled { background-color: #21262d; color: #484f58; border-color: #21262d; }
+QPushButton#btnCapture:pressed { background-color: #1fa896; color: #0b0f14; }
+QPushButton#btnCapture:disabled { background-color: #141a22; color: #46525f; border-color: #141a22; }
 
 QPushButton#btnApply {
-    background-color: #238636;
-    color: #ffffff;
-    border: 1px solid #2ea043;
-    border-radius: 6px;
+    background-color: #4be08a;
+    color: #0b0f14;
+    border: 1px solid #4be08a;
+    border-radius: 0px;
     font-weight: 700;
     font-size: 13px;
     padding: 10px 28px;
 }
-QPushButton#btnApply:hover { background-color: #2ea043; border-color: #3fb950; color: #ffffff; }
-QPushButton#btnApply:pressed { background-color: #1a7f37; color: #ffffff; }
-QPushButton#btnApply:disabled { background-color: #21262d; color: #484f58; border-color: #21262d; }
+QPushButton#btnApply:hover { background-color: #71e8a3; border-color: #71e8a3; color: #0b0f14; }
+QPushButton#btnApply:pressed { background-color: #35b06c; color: #0b0f14; }
+QPushButton#btnApply:disabled { background-color: #141a22; color: #46525f; border-color: #141a22; }
 
 QPushButton#btnVerify {
-    background-color: #6e40c9;
-    color: #ffffff;
-    border: 1px solid #8250df;
-    border-radius: 6px;
+    background-color: #ffb454;
+    color: #0b0f14;
+    border: 1px solid #ffb454;
+    border-radius: 0px;
     font-weight: 700;
     font-size: 13px;
     padding: 10px 28px;
 }
-QPushButton#btnVerify:hover { background-color: #8250df; border-color: #a371f7; color: #ffffff; }
-QPushButton#btnVerify:pressed { background-color: #5a32a3; color: #ffffff; }
-QPushButton#btnVerify:disabled { background-color: #21262d; color: #484f58; border-color: #21262d; }
+QPushButton#btnVerify:hover { background-color: #ffc678; border-color: #ffc678; color: #0b0f14; }
+QPushButton#btnVerify:pressed { background-color: #d99539; color: #0b0f14; }
+QPushButton#btnVerify:disabled { background-color: #141a22; color: #46525f; border-color: #141a22; }
 
 /* ── Workflow step buttons — after generic ── */
 QPushButton#wfBtn {
     background: transparent;
-    color: #8b949e;
+    color: #7d8a99;
     border: none;
     border-bottom: 2px solid transparent;
     font-size: 12px;
@@ -237,116 +237,116 @@ QPushButton#wfBtn {
     border-radius: 0px;
 }
 QPushButton#wfBtn:hover {
-    color: #e6edf3;
-    background: #1c2330;
+    color: #d7e0ea;
+    background: #141a22;
     border: none;
-    border-bottom: 2px solid #484f58;
+    border-bottom: 2px solid #3a4655;
 }
 QPushButton#wfBtn[active="true"] {
-    color: #38bdf8;
+    color: #2fd6c3;
     border: none;
-    border-bottom: 2px solid #38bdf8;
-    background: #0c1a26;
+    border-bottom: 2px solid #2fd6c3;
+    background: #0c1a18;
 }
 QPushButton#wfBtn[completed="true"] {
-    color: #3fb950;
+    color: #4be08a;
     border: none;
-    border-bottom: 2px solid #3fb950;
+    border-bottom: 2px solid #4be08a;
     background: transparent;
 }
 
 /* ── Line Edit ── */
 QLineEdit {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 6px;
+    background: #0b0f14;
+    border: 1px solid #232b35;
+    border-radius: 0px;
     padding: 6px 10px;
-    color: #e6edf3;
-    selection-background-color: #1f6feb;
+    color: #d7e0ea;
+    selection-background-color: #17453f;
 }
-QLineEdit:focus { border-color: #388bfd; }
-QLineEdit:disabled { background: #161b22; color: #484f58; }
+QLineEdit:focus { border-color: #2fd6c3; }
+QLineEdit:disabled { background: #10151c; color: #46525f; }
 
 /* ── ComboBox ── */
 QComboBox {
-    background: #21262d;
-    border: 1px solid #30363d;
-    border-radius: 6px;
+    background: #141a22;
+    border: 1px solid #232b35;
+    border-radius: 0px;
     padding: 6px 12px;
-    color: #e6edf3;
+    color: #d7e0ea;
     min-width: 190px;
 }
-QComboBox:hover { border-color: #484f58; }
-QComboBox:focus { border-color: #388bfd; }
+QComboBox:hover { border-color: #3a4655; }
+QComboBox:focus { border-color: #2fd6c3; }
 QComboBox::drop-down { border: none; padding-right: 8px; }
 QComboBox QAbstractItemView {
-    background: #161b22;
-    border: 1px solid #30363d;
-    selection-background-color: #1f3a5f;
-    color: #e6edf3;
+    background: #10151c;
+    border: 1px solid #232b35;
+    selection-background-color: #17453f;
+    color: #d7e0ea;
 }
 
 /* ── Tab widget ── */
 QTabWidget::pane {
-    border: 1px solid #30363d;
+    border: 1px solid #232b35;
     border-top: none;
-    background: #0d1117;
+    background: #0b0f14;
 }
 QTabBar::tab {
-    background: #161b22;
-    color: #8b949e;
-    border: 1px solid #30363d;
+    background: #10151c;
+    color: #7d8a99;
+    border: 1px solid #232b35;
     border-bottom: none;
     padding: 7px 22px;
     margin-right: 2px;
     font-weight: 500;
-    border-radius: 5px 5px 0 0;
+    border-radius: 0px;
 }
 QTabBar::tab:selected {
-    background: #0d1117;
-    color: #e6edf3;
+    background: #0b0f14;
+    color: #d7e0ea;
     font-weight: 700;
-    border-top: 2px solid #38bdf8;
+    border-top: 2px solid #2fd6c3;
 }
-QTabBar::tab:hover:!selected { background: #1c2330; color: #c9d1d9; }
+QTabBar::tab:hover:!selected { background: #141a22; color: #b7c2ce; }
 
 /* ── Text output areas ── */
 QTextEdit {
-    background: #0d1117;
+    background: #0b0f14;
     border: none;
-    color: #c9d1d9;
-    font-family: "Segoe UI", Arial, sans-serif;
+    color: #b7c2ce;
+    font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
     font-size: 13px;
     padding: 12px;
-    selection-background-color: #1f3a5f;
+    selection-background-color: #17453f;
 }
 QPlainTextEdit {
-    background: #0d1117;
+    background: #0b0f14;
     border: none;
-    color: #8b949e;
-    font-family: "Consolas", "Courier New", monospace;
+    color: #7d8a99;
+    font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
     font-size: 12px;
     padding: 10px;
-    selection-background-color: #1f3a5f;
+    selection-background-color: #17453f;
 }
 
 /* ── Results Table ── */
 QTableView {
-    background: #0d1117;
+    background: #0b0f14;
     border: none;
-    gridline-color: #21262d;
-    color: #c9d1d9;
+    gridline-color: #141a22;
+    color: #b7c2ce;
     font-size: 12px;
-    selection-background-color: #1f3a5f;
-    alternate-background-color: #161b22;
+    selection-background-color: #17453f;
+    alternate-background-color: #10151c;
 }
-QTableView::item:selected { background: #1f3a5f; color: #e6edf3; }
+QTableView::item:selected { background: #17453f; color: #d7e0ea; }
 QHeaderView::section {
-    background: #161b22;
+    background: #10151c;
     border: none;
-    border-right: 1px solid #21262d;
-    border-bottom: 1px solid #30363d;
-    color: #8b949e;
+    border-right: 1px solid #141a22;
+    border-bottom: 1px solid #232b35;
+    color: #7d8a99;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -355,96 +355,96 @@ QHeaderView::section {
 
 /* ── Status bar ── */
 QStatusBar {
-    background: #161b22;
-    border-top: 1px solid #30363d;
-    color: #8b949e;
+    background: #10151c;
+    border-top: 1px solid #232b35;
+    color: #7d8a99;
     font-size: 11px;
 }
 QStatusBar::item { border: none; }
 
 /* ── Menu bar ── */
 QMenuBar {
-    background: #161b22;
-    border-bottom: 1px solid #30363d;
-    color: #c9d1d9;
+    background: #10151c;
+    border-bottom: 1px solid #232b35;
+    color: #b7c2ce;
     padding: 2px;
 }
-QMenuBar::item:selected { background: #21262d; color: #e6edf3; border-radius: 4px; }
+QMenuBar::item:selected { background: #141a22; color: #2fd6c3; border-radius: 0px; }
 QMenu {
-    background: #161b22;
-    border: 1px solid #30363d;
-    color: #c9d1d9;
+    background: #10151c;
+    border: 1px solid #232b35;
+    color: #b7c2ce;
 }
-QMenu::item:selected { background: #21262d; color: #e6edf3; }
-QMenu::separator { height: 1px; background: #30363d; margin: 4px 0; }
+QMenu::item:selected { background: #141a22; color: #2fd6c3; }
+QMenu::separator { height: 1px; background: #232b35; margin: 4px 0; }
 
 /* ── Dialogs ── */
-QDialog { background: #161b22; }
+QDialog { background: #10151c; }
 QDialogButtonBox QPushButton { min-width: 80px; }
 
 /* ── Scroll bars ── */
 QScrollBar:vertical {
-    background: #0d1117; width: 8px; border: none;
+    background: #0b0f14; width: 8px; border: none;
 }
 QScrollBar::handle:vertical {
-    background: #30363d; border-radius: 4px; min-height: 20px;
+    background: #232b35; border-radius: 0px; min-height: 20px;
 }
-QScrollBar::handle:vertical:hover { background: #484f58; }
+QScrollBar::handle:vertical:hover { background: #3a4655; }
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }
 QScrollBar:horizontal {
-    background: #0d1117; height: 8px; border: none;
+    background: #0b0f14; height: 8px; border: none;
 }
 QScrollBar::handle:horizontal {
-    background: #30363d; border-radius: 4px; min-width: 20px;
+    background: #232b35; border-radius: 0px; min-width: 20px;
 }
-QScrollBar::handle:horizontal:hover { background: #484f58; }
+QScrollBar::handle:horizontal:hover { background: #3a4655; }
 QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0; }
 
 /* ── License badge ── */
 #licBadge {
-    color: #8b949e; font-size: 11px; font-weight: 600;
-    padding: 3px 10px; border: 1px solid #30363d;
-    border-radius: 10px; background: #21262d;
+    color: #7d8a99; font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border: 1px solid #232b35;
+    border-radius: 0px; background: #141a22;
 }
 #licBadge[licensed="true"] {
-    color: #3fb950; border-color: #238636;
-    background: #0d1f0f; font-weight: 700;
+    color: #4be08a; border-color: #35b06c;
+    background: #0c1f14; font-weight: 700;
 }
 #licBadge[trial="true"] {
-    color: #d29922; border-color: #9e6a03;
-    background: #1f1500; font-weight: 600;
+    color: #ffb454; border-color: #a86f2a;
+    background: #1f1608; font-weight: 600;
 }
 
 /* ── Admin badge ── */
-#adminOk  { color: #3fb950; font-size: 11px; font-weight: 600; padding: 2px 8px; border: 1px solid #238636; border-radius: 4px; background: #0d1f0f; }
-#adminOff { color: #d29922; font-size: 11px; padding: 2px 8px; border: 1px solid #9e6a03; border-radius: 4px; background: #1f1500; }
+#adminOk  { color: #4be08a; font-size: 11px; font-weight: 600; padding: 2px 8px; border: 1px solid #35b06c; border-radius: 0px; background: #0c1f14; }
+#adminOff { color: #ffb454; font-size: 11px; padding: 2px 8px; border: 1px solid #a86f2a; border-radius: 0px; background: #1f1608; }
 
 /* ── Dry-run checkbox ── */
-QCheckBox#dryRunChk { color: #d29922; font-weight: 700; font-size: 12px; }
-QCheckBox#dryRunChk::indicator { width:14px; height:14px; border:1px solid #9e6a03; border-radius:3px; background:#1f1500; }
-QCheckBox#dryRunChk::indicator:checked { background: #d29922; border-color: #e3b341; }
+QCheckBox#dryRunChk { color: #ffb454; font-weight: 700; font-size: 12px; }
+QCheckBox#dryRunChk::indicator { width:14px; height:14px; border:1px solid #a86f2a; border-radius:0px; background:#1f1608; }
+QCheckBox#dryRunChk::indicator:checked { background: #ffb454; border-color: #ffc678; }
 
 /* ── Chips / inline badges ── */
-#chipWarn    { color: #d29922; background: #1f1500; border: 1px solid #9e6a03; border-radius: 4px; padding: 4px 8px; font-size: 11px; }
-#chipInfo    { color: #388bfd; background: #0c1a26; border: 1px solid #1f6feb; border-radius: 4px; padding: 4px 8px; font-size: 11px; }
-#chipSuccess { color: #3fb950; background: #0d1f0f; border: 1px solid #238636; border-radius: 4px; padding: 4px 8px; font-size: 11px; }
+#chipWarn    { color: #ffb454; background: #1f1608; border: 1px solid #a86f2a; border-radius: 0px; padding: 4px 8px; font-size: 11px; }
+#chipInfo    { color: #2fd6c3; background: #0c1a18; border: 1px solid #1fa896; border-radius: 0px; padding: 4px 8px; font-size: 11px; }
+#chipSuccess { color: #4be08a; background: #0c1f14; border: 1px solid #35b06c; border-radius: 0px; padding: 4px 8px; font-size: 11px; }
 
 /* ── License key input ── */
 #keyInput {
-    font-family: "Consolas", "Courier New", monospace;
+    font-family: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
     font-size: 15px; letter-spacing: 2px;
-    color: #38bdf8; background: #0c1a26;
-    border: 1px solid #0ea5e9; border-radius: 6px;
+    color: #2fd6c3; background: #0c1a18;
+    border: 1px solid #1fa896; border-radius: 0px;
     padding: 10px 14px;
 }
-#keyInput:focus { border-color: #38bdf8; background: #0d1117; }
+#keyInput:focus { border-color: #2fd6c3; background: #0b0f14; }
 
 /* ── Splitter ── */
-QSplitter::handle { background: #30363d; width: 1px; height: 1px; }
+QSplitter::handle { background: #232b35; width: 1px; height: 1px; }
 
 /* ── Frame separators ── */
-QFrame[frameShape="4"] { color: #30363d; }
-QFrame[frameShape="5"] { color: #30363d; }
+QFrame[frameShape="4"] { color: #232b35; }
+QFrame[frameShape="5"] { color: #232b35; }
 """
 
 
@@ -473,18 +473,18 @@ def gui_main() -> int:
         dlg.setWindowTitle(f"License — {APP_TITLE}")
         dlg.setModal(True)
         dlg.setFixedWidth(540)
-        dlg.setStyleSheet(LIGHT_STYLE)
+        dlg.setStyleSheet(THEME_STYLE)
         layout = QVBoxLayout(dlg)
         layout.setSpacing(14)
         layout.setContentsMargins(24, 24, 24, 24)
 
         title_lbl = QLabel(f"Activate {APP_NAME}")
-        title_lbl.setStyleSheet("font-size:18px; font-weight:bold; color:#e6edf3;")
+        title_lbl.setStyleSheet("font-size:18px; font-weight:bold; color:#d7e0ea; letter-spacing:1px;")
         layout.addWidget(title_lbl)
 
         status_lbl = QLabel(current_lic.display_status())
         status_lbl.setWordWrap(True)
-        status_lbl.setObjectName("successChip" if current_lic.is_pro() else "warningChip")
+        status_lbl.setObjectName("chipSuccess" if current_lic.is_pro() else "chipWarn")
         layout.addWidget(status_lbl)
 
         result_holder = [current_lic]
@@ -497,10 +497,10 @@ def gui_main() -> int:
                 f"<b>Seat:</b> {_seat}<br>"
                 f"<b>Activated:</b> {_activated}"
             )
-            info.setStyleSheet("color:#8b949e; font-size:12px; line-height:1.7;")
+            info.setStyleSheet("color:#7d8a99; font-size:12px; line-height:1.7;")
             layout.addWidget(info)
             deact_btn = QPushButton("Deactivate License")
-            deact_btn.setStyleSheet("color:#f85149; border-color:#7f1d1d; background:#1a0a0a;")
+            deact_btn.setStyleSheet("color:#ff5c66; border-color:#7a2c31; background:#1a0d0e;")
             layout.addWidget(deact_btn)
             close_btns = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
             close_btns.rejected.connect(dlg.reject)
@@ -518,25 +518,25 @@ def gui_main() -> int:
 
         sep = QFrame()
         sep.setFrameShape(QFrame.Shape.HLine)
-        sep.setStyleSheet("color:#1e293b;")
+        sep.setStyleSheet("color:#232b35;")
         layout.addWidget(sep)
         layout.addWidget(QLabel("Enter your license key:"))
 
         key_input = QLineEdit()
-        key_input.setObjectName("licenseKeyInput")
+        key_input.setObjectName("keyInput")
         key_input.setPlaceholderText("WGPRO-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX")
         key_input.setMaxLength(36)
         layout.addWidget(key_input)
 
         seat_lbl = QLabel("Seat name (optional):")
-        seat_lbl.setStyleSheet("color:#8b949e; font-size:12px;")
+        seat_lbl.setStyleSheet("color:#7d8a99; font-size:12px;")
         layout.addWidget(seat_lbl)
         seat_input = QLineEdit()
         seat_input.setPlaceholderText("e.g. Main Dev PC")
         layout.addWidget(seat_input)
 
         err_lbl = QLabel("")
-        err_lbl.setObjectName("warningChip")
+        err_lbl.setObjectName("chipWarn")
         err_lbl.setVisible(False)
         err_lbl.setWordWrap(True)
         layout.addWidget(err_lbl)
@@ -545,7 +545,7 @@ def gui_main() -> int:
         act_btn = QPushButton("Activate")
         act_btn.setObjectName("btnCapture")
         trial_btn = QPushButton("Continue Trial")
-        trial_btn.setStyleSheet("color:#94a3b8;")
+        trial_btn.setStyleSheet("color:#7d8a99;")
         cancel_btn = QPushButton("Cancel")
         btn_row.addWidget(act_btn)
         btn_row.addWidget(trial_btn)
@@ -554,7 +554,7 @@ def gui_main() -> int:
         layout.addLayout(btn_row)
 
         purchase_lbl = QLabel(
-            '<a href="https://example.com/wingoes-pro" style="color:#38bdf8;">Purchase a license →</a>'
+            '<a href="https://example.com/wingoes-pro" style="color:#2fd6c3;">Purchase a license →</a>'
         )
         purchase_lbl.setOpenExternalLinks(True)
         purchase_lbl.setStyleSheet("font-size:12px;")
@@ -585,13 +585,13 @@ def gui_main() -> int:
     # ── HTML Dialog ───────────────────────────────────────────────────────────
 
     HELP_HTML = """<style>
-    body{font-family:'Segoe UI',Arial;color:#e2e8f0;background:#1a1d23;}
-    h2{color:#38bdf8;border-bottom:1px solid #1e293b;padding-bottom:8px;}
-    h3{color:#94a3b8;margin-top:20px;} h4{color:#64748b;}
-    p,li{color:#cbd5e1;line-height:1.7;}
-    blockquote{border-left:3px solid #3b82f6;margin-left:0;padding-left:16px;color:#64748b;}
-    code{background:#0f172a;border:1px solid #1e293b;padding:2px 6px;border-radius:3px;color:#38bdf8;font-family:Consolas;}
-    hr{border:none;border-top:1px solid #1e293b;}
+    body{font-family:'JetBrains Mono','Cascadia Mono',Consolas,monospace;color:#d7e0ea;background:#0b0f14;}
+    h2{color:#2fd6c3;border-bottom:1px solid #232b35;padding-bottom:8px;letter-spacing:1px;}
+    h3{color:#7d8a99;margin-top:20px;letter-spacing:1px;} h4{color:#ffb454;}
+    p,li{color:#b7c2ce;line-height:1.7;}
+    blockquote{border-left:2px solid #2fd6c3;margin-left:0;padding-left:16px;color:#7d8a99;}
+    code{background:#10151c;border:1px solid #232b35;padding:2px 6px;color:#2fd6c3;font-family:'JetBrains Mono',Consolas,monospace;}
+    hr{border:none;border-top:1px solid #232b35;}
     </style>
     <h2>How to Use WinGOES Pro</h2>
     <h3>The Three-Step Workflow</h3>
@@ -617,12 +617,12 @@ def gui_main() -> int:
     <p>Most log entries are <b>informational</b>. Only entries marked <code>fatal</code> indicate a real failure.</p>"""
 
     ABOUT_HTML = """<style>
-    body{font-family:'Segoe UI',Arial;color:#e2e8f0;background:#1a1d23;}
-    h2{color:#38bdf8;} h3{color:#94a3b8;margin-top:20px;}
-    p,li{color:#cbd5e1;line-height:1.7;}
-    hr{border:none;border-top:1px solid #1e293b;}
+    body{font-family:'JetBrains Mono','Cascadia Mono',Consolas,monospace;color:#d7e0ea;background:#0b0f14;}
+    h2{color:#2fd6c3;letter-spacing:1px;} h3{color:#7d8a99;margin-top:20px;letter-spacing:1px;}
+    p,li{color:#b7c2ce;line-height:1.7;}
+    hr{border:none;border-top:1px solid #232b35;}
     </style>
-    <h2>About WinGOES Pro 2.0</h2>
+    <h2>About WinGOES Pro 2.1</h2>
     <p><i>"Rebuild Windows cleanly. Restore only what matters."</i></p>
     <p><b>WinGOES Pro</b> captures your essential setup, lets you install Windows fresh,
     then restores only what's safe — leaving old problems behind.</p>
@@ -642,7 +642,7 @@ def gui_main() -> int:
     <li>Download files silently</li>
     </ul>
     <hr/>
-    <p><b>WinGOES Pro 2.0 — Professional Edition</b><br/>
+    <p><b>WinGOES Pro 2.1 — Professional Edition</b><br/>
     Windows 10 Pro &bull; Python 3.11+ &bull; PyQt6</p>"""
 
     def show_html_dialog(parent, title: str, html: str) -> None:
@@ -650,7 +650,7 @@ def gui_main() -> int:
         dlg.setWindowTitle(title)
         dlg.setModal(True)
         dlg.resize(760, 560)
-        dlg.setStyleSheet(LIGHT_STYLE)
+        dlg.setStyleSheet(THEME_STYLE)
         layout = QVBoxLayout(dlg)
         view = QTextBrowser()
         view.setOpenExternalLinks(True)
@@ -688,9 +688,9 @@ def gui_main() -> int:
                 return [r.get("step",""), r.get("item",""), r.get("status",""), r.get("message","")][col]
             if role == Qt.ItemDataRole.ForegroundRole and col == 2:
                 s = r.get("status","")
-                if s == "OK": return QColor("#4ade80")
-                if s == "FAIL": return QColor("#f87171")
-                return QColor("#94a3b8")
+                if s == "OK": return QColor("#4be08a")
+                if s == "FAIL": return QColor("#ff5c66")
+                return QColor("#7d8a99")
             return None
 
         def add_row(self, step, item, status, message):
@@ -841,7 +841,7 @@ def gui_main() -> int:
             brand_lay.setSpacing(3)
             t_row = QHBoxLayout(); t_row.setSpacing(8)
             title_lbl = QLabel("WinGOES"); title_lbl.setObjectName("brandTitle")
-            ver_lbl = QLabel("Pro 2.0"); ver_lbl.setObjectName("brandVersion")
+            ver_lbl = QLabel("Pro 2.1"); ver_lbl.setObjectName("brandVersion")
             t_row.addWidget(title_lbl); t_row.addWidget(ver_lbl); t_row.addStretch()
             sub_lbl = QLabel("REBUILD ASSISTANT"); sub_lbl.setObjectName("brandSub")
             brand_lay.addLayout(t_row)
@@ -850,7 +850,8 @@ def gui_main() -> int:
 
             # License + admin row
             lic_row = QWidget()
-            lic_row.setStyleSheet("background: #0d1117; padding: 6px 16px;")
+            lic_row.setObjectName("licRow")
+            lic_row.setStyleSheet("#licRow { background: #0b0f14; padding: 6px 16px; }")
             lic_row_l = QHBoxLayout(lic_row)
             lic_row_l.setContentsMargins(0, 0, 0, 0); lic_row_l.setSpacing(6)
             self.lic_badge = QLabel("…"); self.lic_badge.setObjectName("licBadge")
@@ -863,7 +864,7 @@ def gui_main() -> int:
             from PyQt6.QtWidgets import QScrollArea
             scroll = QScrollArea(); scroll.setWidgetResizable(True)
             scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            scroll.setStyleSheet("QScrollArea { border: none; background: #161b22; }")
+            scroll.setStyleSheet("QScrollArea { border: none; background: #10151c; }")
             ctrl_widget = QWidget(); ctrl_widget.setObjectName("sidebar")
             ctrl_l = QVBoxLayout(ctrl_widget)
             ctrl_l.setContentsMargins(0, 8, 0, 16)
@@ -922,9 +923,9 @@ def gui_main() -> int:
             # Manage license button at bottom of sidebar
             lic_btn = QPushButton("Manage License…")
             lic_btn.setStyleSheet(
-                "QPushButton { background: #0ea5e9; color: #0d1117; border: none; "
-                "border-radius: 5px; padding: 8px 16px; font-weight: 700; margin: 12px 16px 4px 16px; }"
-                "QPushButton:hover { background: #38bdf8; }"
+                "QPushButton { background: #2fd6c3; color: #0b0f14; border: none; "
+                "border-radius: 0px; padding: 8px 16px; font-weight: 700; margin: 12px 16px 4px 16px; }"
+                "QPushButton:hover { background: #5ce4d4; }"
             )
             lic_btn.clicked.connect(self.open_license_dialog)
             ctrl_l.addWidget(lic_btn)
@@ -981,8 +982,9 @@ def gui_main() -> int:
 
             # ── Action bar ────────────────────────────────────────────────────
             action_bar = QWidget()
+            action_bar.setObjectName("actionBar")
             action_bar.setStyleSheet(
-                "background: #161b22; border-top: 1px solid #30363d; padding: 0px;"
+                "#actionBar { background: #10151c; border-top: 1px solid #232b35; padding: 0px; }"
             )
             ab_l = QHBoxLayout(action_bar)
             ab_l.setContentsMargins(16, 10, 16, 10); ab_l.setSpacing(10)
@@ -1042,7 +1044,7 @@ def gui_main() -> int:
         def _update_license_badge(self):
             lic = self.license_info
             if lic.is_pro():
-                self.lic_badge.setText(f"✓ Licensed  •  {EDITION_NAME}")
+                self.lic_badge.setText(f"✓ Licensed  •  {self.license_info.edition or EDITION_NAME}")
                 self.lic_badge.setProperty("licensed","true"); self.lic_badge.setProperty("trial","false")
             elif lic.trial and lic.valid:
                 self.lic_badge.setText(f"Trial  •  {lic.trial_days_remaining}d left")
@@ -1108,7 +1110,8 @@ def gui_main() -> int:
                 cfg_vscode=self.chk_vscode.isChecked(), cfg_windows_terminal=self.chk_terminal.isChecked(),
                 win_tz_region=self.chk_tz.isChecked(), win_power_plan=self.chk_power.isChecked(),
                 drv_inventory=self.chk_drv_inv.isChecked(), drv_checklist=self.chk_drv_check.isChecked(),
-                drv_same_hw_transfer=self.chk_drv_transfer.isChecked(),
+                drv_export_driverstore=self.chk_drv_transfer.isChecked(),
+                drv_restore_driverstore=self.chk_drv_transfer.isChecked(),
             )
 
         # ── Operations ────────────────────────────────────────────────────────
@@ -1147,7 +1150,7 @@ def gui_main() -> int:
             if op_name == "APPLY" and not self.confirm_apply(): return
 
             self.table_model.clear(); self.log.clear(); self.summary.clear()
-            dry_label = "Yes" if self.dryrun_chk.isChecked() else '<b style="color:#f85149">No</b>'
+            dry_label = "Yes" if self.dryrun_chk.isChecked() else '<b style="color:#ff5c66">No</b>'
             self.summary.append(
                 f"<b>{APP_TITLE}</b>  |  {op_name}  |  Mode: {mode}  |  "
                 f"Dry-run: {dry_label}"
@@ -1173,11 +1176,11 @@ def gui_main() -> int:
             self.set_busy(False)
             self.last_report_path = report_path or None
             self.last_summary_path = summary_path or None
-            badge = ('<span style="color:#3fb950;font-weight:bold;">✓ COMPLETED</span>' if ok else
-                     '<span style="color:#f85149;font-weight:bold;">⚠ COMPLETED WITH ISSUES</span>')
+            badge = ('<span style="color:#4be08a;font-weight:bold;">✓ COMPLETED</span>' if ok else
+                     '<span style="color:#ff5c66;font-weight:bold;">⚠ COMPLETED WITH ISSUES</span>')
             self.summary.append(f"<br>{badge}<br>")
             if report_path:
-                self.summary.append(f'Report: <a href="file:///{report_path}" style="color:#38bdf8">{report_path}</a>')
+                self.summary.append(f'Report: <a href="file:///{report_path}" style="color:#2fd6c3">{report_path}</a>')
             _result_word = "succeeded" if ok else "completed with issues"
             _report_label = report_path or "no report"
             self.status_bar.showMessage(
@@ -1210,8 +1213,8 @@ def gui_main() -> int:
 
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
-    app.setStyleSheet(LIGHT_STYLE)
-    _set_wid("WinGOES.Pro.2.0")
+    app.setStyleSheet(THEME_STYLE)
+    _set_wid("WinGOES.Pro.2.1")
 
     icon_path = Path(__file__).resolve().parent / "assets" / "wingoes.ico"
     if icon_path.exists():
@@ -1275,7 +1278,8 @@ def cli_main(ns) -> int:
         cfg_vscode=not ns.no_vscode, cfg_windows_terminal=not ns.no_terminal,
         win_tz_region=bool(ns.tz_region), win_power_plan=bool(ns.power_plan),
         drv_inventory=not ns.no_driver_inventory, drv_checklist=not ns.no_driver_checklist,
-        drv_same_hw_transfer=bool(ns.driver_transfer),
+        drv_export_driverstore=bool(ns.driver_transfer),
+        drv_restore_driverstore=bool(ns.driver_transfer),
     )
     def cb(line): print(line)
     if ns.op == "capture":

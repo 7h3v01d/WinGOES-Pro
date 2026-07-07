@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional, Tuple
 # Constants / Policy
 # -----------------------------
 
-APP_TITLE = "WinGOES Pro 2.0"
+APP_TITLE = "WinGOES Pro 2.1"
 
 MODE_CLEAN = "CLEAN_REBUILD"
 MODE_SAME = "SAME_HARDWARE_TRANSFER"
@@ -574,8 +574,12 @@ def classify_hardware_match(source_fp: Dict[str, Any], target_fp: Dict[str, Any]
     s_bb_key = (norm(s_bb.get("Manufacturer")), norm(s_bb.get("Product")))
     t_bb_key = (norm(t_bb.get("Manufacturer")), norm(t_bb.get("Product")))
 
-    s_cpu = norm((source_fp.get("cpu", {}) or {}).get("name"))
-    t_cpu = norm((target_fp.get("cpu", {}) or {}).get("name"))
+    def _cpu_name(fp: Dict[str, Any]) -> Any:
+        c = fp.get("cpu")
+        return c.get("name") if isinstance(c, dict) else None
+
+    s_cpu = norm(_cpu_name(source_fp))
+    t_cpu = norm(_cpu_name(target_fp))
 
     cpu_match = bool(s_cpu and t_cpu and s_cpu == t_cpu)
     bb_match = bool(s_bb_key[0] and s_bb_key[1] and s_bb_key == t_bb_key)

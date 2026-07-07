@@ -584,12 +584,21 @@ def _norm_s(s: Any) -> str:
     return (str(s).strip() if s is not None else "").strip()
 
 
+def _as_dict(v: Any) -> Dict[str, Any]:
+    """Guard for legacy/malformed fingerprint fields that may not be dicts."""
+    return v if isinstance(v, dict) else {}
+
+
+def _as_list(v: Any) -> List[Any]:
+    return v if isinstance(v, list) else []
+
+
 def generate_oem_driver_checklist_from_fp(fp: Dict[str, Any]) -> List[str]:
-    mm = fp.get("manufacturer_model", {}) or {}
-    bb = fp.get("baseboard", {}) or {}
-    cpu = (fp.get("cpu", {}) or {}).get("name")
-    gpus = fp.get("gpus", []) or []
-    nics = fp.get("nics", []) or []
+    mm = _as_dict(fp.get("manufacturer_model"))
+    bb = _as_dict(fp.get("baseboard"))
+    cpu = _as_dict(fp.get("cpu")).get("name")
+    gpus = _as_list(fp.get("gpus"))
+    nics = _as_list(fp.get("nics"))
 
     mfg = _norm_s(mm.get("Manufacturer"))
     model = _norm_s(mm.get("Model"))

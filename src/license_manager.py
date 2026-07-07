@@ -31,7 +31,7 @@ from typing import Optional, Tuple
 # ── Retail Config ─────────────────────────────────────────────────────────────
 
 APP_NAME     = "WinGOES Pro"
-APP_VERSION  = "2.0"
+APP_VERSION  = "2.1"
 EDITION_NAME = "Professional"
 LICENSE_FILE_NAME = "wingoes_pro.lic"
 

@@ -45,7 +45,8 @@ class WinGOESSuite(unittest.TestCase):
             win_power_plan=True,
             drv_inventory=True,
             drv_checklist=True,
-            drv_same_hw_transfer=True,
+            drv_export_driverstore=True,
+            drv_restore_driverstore=True,
             risky_shell_context_menu=True,
         )
 
@@ -54,7 +55,8 @@ class WinGOESSuite(unittest.TestCase):
         # CLEAN_REBUILD should force these off
         self.assertFalse(enforced.win_tz_region)
         self.assertFalse(enforced.win_power_plan)
-        self.assertFalse(enforced.drv_same_hw_transfer)
+        self.assertFalse(enforced.drv_export_driverstore)
+        self.assertFalse(enforced.drv_restore_driverstore)
 
         # Always forced off by policy
         self.assertFalse(enforced.risky_shell_context_menu)
@@ -67,7 +69,8 @@ class WinGOESSuite(unittest.TestCase):
         toggles = mu.Toggles(
             win_tz_region=True,
             win_power_plan=True,
-            drv_same_hw_transfer=True,
+            drv_export_driverstore=True,
+            drv_restore_driverstore=True,
             risky_shell_context_menu=True,
         )
 
@@ -76,7 +79,7 @@ class WinGOESSuite(unittest.TestCase):
         enforced_fail = mu.enforce_gates(ctx_fail, toggles)
         self.assertFalse(enforced_fail.win_tz_region)
         self.assertFalse(enforced_fail.win_power_plan)
-        self.assertFalse(enforced_fail.drv_same_hw_transfer)
+        self.assertFalse(enforced_fail.drv_restore_driverstore)
         self.assertFalse(enforced_fail.risky_shell_context_menu)
 
         ctx_pass = mu.make_run_context(self.bundle, mu.MODE_SAME, dry_run=True)
@@ -85,7 +88,7 @@ class WinGOESSuite(unittest.TestCase):
         # Should be allowed when MATCH_PASS, except the permanently disabled risky flag
         self.assertTrue(enforced_pass.win_tz_region)
         self.assertTrue(enforced_pass.win_power_plan)
-        self.assertTrue(enforced_pass.drv_same_hw_transfer)
+        self.assertTrue(enforced_pass.drv_restore_driverstore)
         self.assertFalse(enforced_pass.risky_shell_context_menu)
 
     # -------------------------
