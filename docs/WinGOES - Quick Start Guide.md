@@ -1,128 +1,113 @@
-**WinGOES - Quick Start Guide**
+# WinGOES Pro — Quick Start Guide
 
-**Windows 10 Pro Rebuild & Migration Assistant**
+**Professional Windows Rebuild & Migration Assistant**
 
-**What WinGOES Does**
+| | |
+|---|---|
+| **Product** | WinGOES Pro 2.1 |
+| **Document** | Quick Start Guide, Rev. 2 |
+| **Applies to** | Windows 10 / 11, Python 3.11+ |
 
-WinGOES helps you **reinstall Windows cleanly** while safely restoring your **apps and personal setup** - without bringing old Windows problems with you.
+---
 
-It works in three steps:  
-**CAPTURE → APPLY → VERIFY**
+## What WinGOES Pro Does
 
-**Step 1 - Choose the Right Mode**
+WinGOES Pro helps you **reinstall Windows cleanly** while safely restoring your **apps and personal setup** — without bringing old Windows problems with you.
 
-☑ **CLEAN REBUILD (Recommended)**  
-Use for:
+The entire product is built around one workflow:
 
-- New PC
-- Fresh Windows install
-- Eliminating old Windows issues
+```
+CAPTURE  →  (reinstall Windows)  →  APPLY  →  VERIFY
+```
 
-✔ Safest option  
-✔ Blocks risky system transfers
+> **First run:** WinGOES Pro starts a 14-day free trial automatically — no registration needed. The badge in the sidebar shows your license state at all times. See the User Manual, §3, for activation.
 
-☐ SAME-HARDWARE TRANSFER (Advanced)  
-Use **only** if reinstalling Windows on the **same PC**  
-Requires hardware match
+---
 
-☐ CUSTOM (Expert)  
-Manual control, still enforces safety limits
+## Step 1 — Choose the Right Mode
 
-**If unsure: choose CLEAN REBUILD**
+The mode selector is in the top toolbar, next to the Dry Run switch.
 
-**Step 2 - Select What You Want to Keep**
+| Mode | Choose it when | Safety level |
+|------|----------------|--------------|
+| **CLEAN REBUILD** *(default)* | New PC, fresh install, eliminating old issues | ✅ Safest — risky transfers blocked |
+| **SAME-HARDWARE TRANSFER** | Reinstalling on the **same physical PC** | ⚠️ Advanced — requires hardware match |
+| **CUSTOM** | Expert manual control | 🧪 Expert — safety gates still apply |
 
-Enable only what you actually use:
+> **If unsure: choose CLEAN REBUILD.** The sidebar will grey out anything the mode forbids and tell you why.
 
-☐ **Applications**
+---
 
-- Winget (recommended)
-- Chocolatey / Scoop (if used)
+## Step 2 — Select What You Want to Keep
 
-☐ **Developer & Power Tools**
+Toggles live in the left sidebar. Enable only what you actually use.
 
-- Git config
-- SSH keys
-- VS Code (extensions + settings)
-- Windows Terminal
+**Package Managers** — Winget (recommended), Chocolatey, Scoop
+**Developer Configs** — Git config, `.gitconfig`, SSH keys (`~/.ssh`), VS Code (settings + extensions), Windows Terminal
+**Windows Settings** *(gated)* — Timezone/Region, Power plan
+**Drivers** — Inventory (safe), Post-install checklist (safe), Driver transfer (⚠ advanced, gated)
 
-☐ **Windows Settings (Safe Only)**
+Drivers are **never copied automatically**. Inventory and checklist only, unless you explicitly enable the gated transfer on matching hardware.
 
-- Timezone
-- Power plan
+---
 
-☐ **Drivers**
+## Step 3 — CAPTURE (Before Reinstalling Windows)
 
-- Inventory & checklist only  
-    (Drivers are NOT copied automatically)
+1. Open WinGOES Pro on your **current** Windows installation.
+2. Pick a **Bundle folder** (toolbar → *Browse…*). This is where everything is saved.
+3. Select your mode and toggles.
+4. Click the **teal ▶ Capture** button in the action bar.
+5. Watch progress in **Live Log**; review results in **Summary** and **Step Results**.
+6. Copy the bundle folder to a USB drive, external disk, or network location.
 
-**Step 3 - CAPTURE (Before Reinstalling Windows)**
+✔ Nothing is changed on your system — CAPTURE is read-only and repeatable.
 
-- Open WinGOES on your **current Windows install**
-- Select your mode and toggles
-- Click **CAPTURE**
-- Wait for completion
-- Copy the **bundle folder** to:
-  - USB drive, or
-  - External disk, or
-  - Network location
+---
 
-✔ Nothing is changed on your system  
-✔ This step is safe and repeatable
+## Step 4 — Install Windows Cleanly
 
-**Step 4 - Install Windows Cleanly**
+Perform a normal Windows 10/11 clean install and complete initial setup. Do **not** copy old system folders or drivers across manually.
 
-- Perform a normal **Windows 10 Pro clean install**
-- Complete initial Windows setup
-- Log into your account
+---
 
-Do **not** copy old system folders or drivers.
+## Step 5 — APPLY (After Windows Is Installed)
 
-**Step 5 - APPLY (After Windows Is Installed)**
+1. Install Python 3.11+ and `pip install PyQt6` on the new system.
+2. Copy your saved bundle folder onto the machine and select it in the toolbar.
+3. Select the **same mode** you used during CAPTURE.
+4. Leave **Dry Run ON** (the amber switch — on by default) and click the **phosphor ▶ Apply** button to preview.
+5. Review the Step Results table, then switch Dry Run off and Apply for real. You'll be asked to confirm.
 
-- Copy the saved **bundle folder** to the new system
-- Open WinGOES
-- Select the **same mode** used during CAPTURE
-- (Optional) Enable **Dry Run** to preview actions
-- Click **APPLY**
+✔ Apps reinstall where possible • configs restore safely • risky actions are blocked automatically.
 
-✔ Apps are reinstalled where possible  
-✔ Settings are restored safely  
-✔ Risky actions are blocked automatically
+---
 
-**Step 6 - VERIFY (Final Check)**
+## Step 6 — VERIFY (Final Check)
 
-Click **VERIFY** to:
+Click the **amber ▶ Verify** button to confirm key tools are installed, check device readiness, and generate a driver/setup checklist. Use the checklist to finish any manual installs (GPU driver, chipset, vendor tools). VERIFY never modifies the system.
 
-- Confirm key tools are installed
-- Check system readiness
-- Generate a driver/setup checklist
+---
 
-Use the checklist to finish any **manual installs** (GPU driver, chipset, etc.).
+## Reading the Log
 
-**Reading the Log (Important)**
+Messages like *"Installed package is not available from any source"* are **normal** — the app was detected but can't be auto-installed, and you may reinstall it manually later. Only entries marked **fatal** indicate a real failure. Failed items appear in **red** in Step Results; passes in **green**.
 
-Messages like:
+---
 
-"Installed package is not available from any source"
+## Best Practices
 
-**Are normal.**  
-They mean:
+- Use **CLEAN REBUILD** unless you are certain you need otherwise
+- Keep your bundle backed up in two places
+- Preview with **Dry Run** before any real Apply
+- Read the VERIFY checklist to completion
+- Never force driver transfers across different hardware
 
-- The app was detected
-- It cannot be auto-installed
-- You may reinstall it manually later
+---
 
-Only messages marked **fatal** indicate real problems.
+## In One Sentence
 
-**Best Practices**
+**WinGOES Pro gives you a clean Windows install — with your useful setup restored and your old problems left behind.**
 
-✔ Use **CLEAN REBUILD** unless you are certain  
-✔ Keep your bundle backed up  
-✔ Use **Dry Run** if unsure  
-✔ Read the VERIFY checklist  
-✔ Do not force driver transfers
+---
 
-**In One Sentence**
-
-**WinGOES gives you a clean Windows install - with your useful setup restored and your old problems left behind.**
+*Copyright © 2026 Leon Priest (7h3v01d) • Apache License 2.0*

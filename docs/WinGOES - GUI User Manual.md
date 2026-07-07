@@ -1,767 +1,369 @@
-**WinGOES - GUI User Manual**
+# WinGOES Pro — GUI User Manual
 
-**Windows 10 Pro Rebuild & Migration Assistant**
+**Professional Windows Rebuild & Migration Assistant**
 
-**1\. What WinGOES Is (and What It Is Not)**
+| | |
+|---|---|
+| **Product** | WinGOES Pro 2.1 |
+| **Document** | GUI User Manual, Rev. 2 |
+| **Applies to** | Windows 10 / 11, Python 3.11+, PyQt6 |
+| **Copyright** | © 2026 Leon Priest (7h3v01d) — Apache License 2.0 |
 
-**WinGOES** is a guided assistant that helps you **safely rebuild or re-set up Windows 10 Pro** without dragging along old problems.
+---
 
-It is designed around one core idea:
+## Contents
 
-**A clean Windows install is usually best - but your useful setup should not be lost.**
+1. [What WinGOES Pro Is (and What It Is Not)](#1-what-wingoes-pro-is-and-what-it-is-not)
+2. [Core Concepts](#2-core-concepts)
+3. [Licensing & Activation](#3-licensing--activation)
+4. [The Main Window — A Guided Tour](#4-the-main-window--a-guided-tour)
+5. [Feature Toggles Reference](#5-feature-toggles-reference)
+6. [The Workflow in Detail](#6-the-workflow-in-detail)
+7. [Reading the Output](#7-reading-the-output)
+8. [Reports & the Bundle Folder](#8-reports--the-bundle-folder)
+9. [Common Real-World Scenarios](#9-common-real-world-scenarios)
+10. [Troubleshooting & FAQ](#10-troubleshooting--faq)
+11. [Best Practices](#11-best-practices)
+- [Appendix A — CLI Reference](#appendix-a--cli-reference)
+- [Appendix B — Safety Policy Summary](#appendix-b--safety-policy-summary)
 
-WinGOES lets you:
+---
 
-- Capture a snapshot of your current system
+## 1. What WinGOES Pro Is (and What It Is Not)
+
+**WinGOES Pro** is a guided assistant that helps you **safely rebuild or re-set up Windows** without dragging along old problems. It is designed around one core idea:
+
+> **A clean Windows install is usually best — but your useful setup should not be lost.**
+
+WinGOES Pro lets you:
+
+- **Capture** a snapshot of your current system (apps, configs, hardware fingerprint)
 - Reinstall Windows cleanly
-- Re-apply _only the safe, intentional parts_ of your setup
+- **Apply** only the safe, intentional parts of your setup to the fresh install
+- **Verify** that the new system is healthy and complete
 
-**WinGOES is NOT:**
+**WinGOES Pro is NOT:**
 
-- A full disk imaging or cloning tool
+- A full disk-imaging or cloning tool
 - A "restore everything exactly as it was" utility
 - A risky driver-migration or registry-copying tool
 
-This is intentional. WinGOES prioritizes **stability, clarity, and control** over convenience shortcuts.
+This is intentional. WinGOES Pro prioritises **stability, clarity, and control** over convenience shortcuts. Every risky operation is either blocked by policy or gated behind an explicit, hardware-verified opt-in.
 
-**2\. Core Concepts (Plain English)**
+---
 
-Before using the GUI, it helps to understand three simple ideas.
+## 2. Core Concepts
 
-**2.1 Capture → Apply → Verify**
+### 2.1 The Three-Stage Workflow
 
-WinGOES works in **three stages**:
+```
+CAPTURE  →  (reinstall Windows)  →  APPLY  →  VERIFY
+```
 
-- **CAPTURE**  
-    Records what _can_ be safely re-applied later
-- **APPLY**  
-    Re-applies selected items to a fresh Windows install
-- **VERIFY**  
-    Confirms that your new system is healthy and ready
+| Stage | Runs on | Modifies system? | Purpose |
+|-------|---------|------------------|---------|
+| **CAPTURE** | Your existing installation | **Never** | Records what can be safely re-applied later |
+| **APPLY** | The fresh installation | Only with Dry Run off | Restores selected items |
+| **VERIFY** | The fresh installation | **Never** | Confirms health, produces a checklist |
 
-You can run these stages on different days and even different machines.
+You can run these stages on different days and different machines — the bundle folder carries everything between them.
 
-**2.2 Migration Modes (Very Important)**
+### 2.2 Migration Modes
 
-WinGOES always operates in **one of three modes**.  
-The mode determines what the tool will _allow_ and what it will _refuse_ to do.
+WinGOES Pro always operates in one of three modes. The mode determines what the tool will *allow* and what it will *refuse*:
 
-**CLEAN REBUILD (Default - Recommended)**
+- **CLEAN REBUILD** *(default)* — the safest mode. Reinstalls apps and restores portable configs; **blocks** Windows-settings transfer and all driver transfer by policy.
+- **SAME-HARDWARE TRANSFER** — for reinstalling on the same physical machine. Unlocks the gated extras, but only when the hardware fingerprint matches.
+- **CUSTOM** — expert control over every toggle. Known-dangerous operations remain permanently blocked even here.
 
-Use when:
+See the companion document *Mode Selection Guide* for a decision flowchart.
 
-- You are reinstalling Windows fresh
-- You want to eliminate old Windows issues
-- You are moving to new hardware
+### 2.3 Hardware Fingerprints
 
-What it does:
+During CAPTURE, WinGOES Pro records an identity fingerprint of the machine: manufacturer/model, baseboard, BIOS serial and UUID, CPU, GPUs, and network adapters. During APPLY and VERIFY it fingerprints the machine it is running on and classifies the match as **PASS**, **PARTIAL**, or **FAIL**.
 
-- Re-installs apps where possible
-- Restores selected user tools and preferences
-- **Blocks risky actions** (driver copying, system tweaks)
+Gated features (Windows settings transfer, DriverStore restore) require **PASS**. This check happens in the engine, not the UI — even if a toggle is on, the engine's deny-first gates (`enforce_gates`) will strip it if the hardware doesn't match. You never configure this; it is automatic.
 
-This is the safest and most common mode.
+### 2.4 Dry Run
 
-**SAME-HARDWARE TRANSFER (Advanced)**
+The amber **Dry Run** switch in the toolbar (ON by default) previews every action without changing anything. Reports, summaries, and Step Results are produced exactly as they would be in a real run, with each action labelled as simulated. Turning Dry Run off before an Apply triggers a confirmation dialog.
 
-Use only when:
+### 2.5 The Bundle Folder
 
-- You are reinstalling Windows on **the same physical machine**
-- You understand the risks
+Everything WinGOES Pro captures lives in one folder you choose — the **bundle**. It is plain files (JSON, text, configs), portable across drives and machines, and human-readable. Treat it as the single artifact to back up between CAPTURE and APPLY.
 
-What it does:
+---
 
-- Allows more system-level restoration
-- Still blocks known dangerous operations
-- Requires hardware fingerprint matching
+## 3. Licensing & Activation
 
-If the hardware does not match, WinGOES will automatically downgrade behavior.
+### 3.1 Trial
 
-**CUSTOM (Expert Use)**
+On first launch, WinGOES Pro begins a **14-day free trial** automatically — no registration, no internet connection. The sidebar badge shows the days remaining (e.g. `Trial • 12d left`, in amber).
 
-Use when:
+### 3.2 Activating a License
 
-- You want full manual control
-- You accept responsibility for advanced choices
+1. Open **License → Manage License…** (or the teal **Manage License…** button at the bottom of the sidebar).
+2. Enter your key in the format `WGPRO-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX`.
+3. Optionally name the seat (e.g. "Main Dev PC").
+4. Click **Activate**.
 
-Even in Custom mode, **WinGOES will still block actions known to cause system instability**.
+Keys are validated **locally** with an HMAC-SHA256 checksum — there is no call-home and no internet requirement. A valid activation turns the sidebar badge phosphor-green: `✓ Licensed • PRO`.
 
-**2.3 Hardware Fingerprints (Automatic Safety Check)**
+**Editions:** PRO, HOME, TEAM (encoded into the key).
 
-WinGOES automatically creates a **hardware fingerprint**:
+### 3.3 Deactivating
 
-- CPU
-- Motherboard
-- Storage identity
+Open the same dialog while licensed and click **Deactivate License**. This removes the stored license from the machine so the key can be used elsewhere.
 
-This fingerprint is used to:
+### 3.4 Where the License Is Stored
 
-- Detect whether APPLY is happening on the same hardware
-- Prevent unsafe driver or system transfers
+`%APPDATA%\WinGOES Pro\` — the file is integrity-signed; manual edits invalidate it.
 
-You do **not** need to configure this. It is automatic.
+---
 
-**3\. The Main GUI Layout**
+## 4. The Main Window — A Guided Tour
 
-The WinGOES GUI is intentionally simple and linear.
+The window is laid out as: menu bar → top toolbar → sidebar + output area → action bar → status bar.
 
-You will typically see:
+### 4.1 Menu Bar
 
-- **Mode Selection**
-- **Feature Toggles**
-- **Action Buttons** (CAPTURE / APPLY / VERIFY)
-- **Live Log Panel**
+| Menu | Contents |
+|------|----------|
+| **File** | Select Bundle Folder…, Open Last Report, Exit |
+| **License** | Manage License… |
+| **Help** | How to Use, About WinGOES Pro |
 
-**4\. Mode Selection (Top Section)**
+### 4.2 Top Toolbar
 
-**What This Does**
+- **Workflow strip** — `① Capture › ② Apply › ③ Verify`. The active stage is underlined in teal while an operation runs.
+- **Bundle** — the bundle folder path, with **Browse…**.
+- **Mode selector** — CLEAN_REBUILD / SAME_HARDWARE_TRANSFER / CUSTOM.
+- **Dry Run** — amber safety switch, ON by default.
 
-This determines the **rules** WinGOES will follow.
+### 4.3 Sidebar (Left)
 
-**How to Use It**
+- **Brand block** — product name and version.
+- **License & Admin badges** — license state (green = licensed, amber = trial) and administrator status (`✓ Admin` green, `⚠ Admin` amber if not elevated).
+- **Toggle sections** — Package Managers, Developer Configs, Windows Settings, Drivers. Toggles disabled by the current mode are greyed out with an amber italic note explaining why (e.g. *"Disabled in CLEAN REBUILD mode"*).
+- **Manage License…** — quick access to activation.
 
-- Choose **CLEAN REBUILD** unless you have a very specific reason not to
-- SAME-HARDWARE TRANSFER should only be selected if:
-  - You are reinstalling Windows on the same PC
-  - You understand that some system risks increase
+### 4.4 Output Tabs (Centre)
 
-**Example**
+| Tab | Shows |
+|-----|-------|
+| **Summary** | High-level narrative of the run: header, progress notes, completion badge, and a clickable link to the report |
+| **Step Results** | A table of every item — Step, Item, Status, Message — with **OK** in phosphor green and **FAIL** in red. Opens automatically if a run completes with issues |
+| **Live Log** | The raw, timestamped engine log as it streams |
 
-"I'm building a new PC and want my dev tools back, but none of the old Windows weirdness."
+### 4.5 Action Bar (Bottom)
 
-→ **CLEAN REBUILD**
+- **▶ Capture** (teal), **▶ Apply** (phosphor), **▶ Verify** (amber) — the three operations, colour-keyed to the workflow.
+- **Open Report** — opens the last run's `report.json`.
+- **Copy Diagnostics** — copies the last report/summary paths to the clipboard, handy for support requests.
 
-**5\. Feature Toggles (What Gets Captured / Applied)**
+### 4.6 Status Bar
 
-Each toggle represents a **category of information**.
+Shows readiness, the operation in progress, and the outcome of the last run.
 
-If a toggle is disabled by your selected mode, the GUI will show it as unavailable.
+---
 
-**5.1 Applications (Package Managers)**
+## 5. Feature Toggles Reference
 
-**Winget**
+### 5.1 Package Managers
 
-Captures:
+| Toggle | Captures | Applies | Notes |
+|--------|----------|---------|-------|
+| **Winget** *(recommended)* | Exported package list | Reinstalls where available | Some apps (games, vendor installers, Store apps) can't auto-reinstall; they are recorded, not forced |
+| **Chocolatey** | `choco list` output | Reinstalls via choco | Enable only if you use it |
+| **Scoop** | Scoop export | Reinstalls via scoop | Enable only if you use it |
 
-- Apps installed via Windows Package Manager
-- App versions where available
+An **installed-applications inventory** is always captured alongside, as a reference for anything the package managers can't cover.
 
-Applies:
+### 5.2 Developer Configs
 
-- Re-installs those apps automatically where possible
+| Toggle | Captures | Applies |
+|--------|----------|---------|
+| **Git global config** | `git config --global` values | Restores identity and preferences |
+| **.gitconfig file** | The raw `~/.gitconfig` | Restores the file (backed up first if one exists) |
+| **SSH keys** | `~/.ssh` (keys, known_hosts, config) | Restores SSH access for Git, servers, automation |
+| **VS Code** | Extensions list, settings, keybindings | Reinstalls extensions, restores preferences |
+| **Windows Terminal** | Profiles and appearance settings | Restores terminal configuration |
 
-Important:
+> **Security note:** SSH private keys are copied into the bundle as-is. Treat the bundle folder with the same care as the keys themselves.
 
-- Some apps cannot be reinstalled automatically (games, vendor installers, Microsoft Store apps)
-- WinGOES records these safely but does not force reinstallation
+### 5.3 Windows Settings *(gated)*
 
-**Example**
+Timezone/Region and Power plan. A small, safe, reversible allowlist — never arbitrary registry data. Availability by mode:
 
-"I want my dev tools, browsers, and utilities back automatically."
+| Mode | Timezone / Power plan |
+|------|-----------------------|
+| CLEAN REBUILD | ✗ Disabled by policy |
+| SAME-HARDWARE TRANSFER | ✓ If hardware match is PASS |
+| CUSTOM | ✓ If hardware match is PASS |
 
-Enable **Winget**
+### 5.4 Drivers *(handled carefully)*
 
-**Chocolatey / Scoop**
+| Toggle | Risk | What it does |
+|--------|------|--------------|
+| **Driver inventory** | Safe | Records every installed driver for reference |
+| **Post-install checklist** | Safe | Generates an OEM-aware "what to install manually" checklist from your fingerprint (chipset, GPU, NIC hints) |
+| **Driver transfer** | ⚠ Advanced, gated | Exports the DriverStore at CAPTURE and restores it at APPLY — **only** on hardware-match PASS, only outside CLEAN REBUILD, and only with the toggle explicitly on |
 
-Same concept as Winget, for users who use these ecosystems.
+WinGOES Pro never copies drivers blindly between different machines. If in doubt, use inventory + checklist and install drivers fresh from the vendor.
 
-Enable only if you actually use them.
+---
 
-**5.2 Developer & Power-User Tools**
+## 6. The Workflow in Detail
 
-**Git Configuration**
+### 6.1 CAPTURE — before reinstalling
 
-Captures:
+1. Launch WinGOES Pro on the existing system.
+2. Choose the bundle folder, mode, and toggles.
+3. Click **▶ Capture**. The workflow strip highlights *① Capture*; controls lock while it runs.
+4. Review **Summary** for the completion badge and **Step Results** for per-item status.
+5. Copy the bundle folder to external storage. Done — nothing on your system was modified.
 
-- Global Git settings
-- Optional .gitconfig file
+CAPTURE is repeatable: run it as many times as you like; each run is journalled separately under `runs/`.
 
-Applies:
+### 6.2 APPLY — after the fresh install
 
-- Restores your Git identity and preferences
+1. On the new system, install Python 3.11+ and PyQt6, copy the bundle across, and launch WinGOES Pro.
+2. Select the bundle and the **same mode** used at CAPTURE.
+3. **First pass:** leave Dry Run ON and click **▶ Apply**. Read the Step Results — this is exactly what a real run will do.
+4. **Second pass:** switch Dry Run off, click **▶ Apply**, and confirm the warning dialog.
+5. The hardware fingerprint is checked automatically; anything requiring a match you don't have is skipped and logged.
 
-Example:
+Existing config files are **backed up with a timestamp** before being replaced.
 
-"I don't want to reconfigure Git name/email on a new install."
+### 6.3 VERIFY — final check
 
-Enable **Git**
+1. Click **▶ Verify**.
+2. WinGOES Pro confirms key tools are present, checks device readiness (flagging devices with driver problems), and prints a completion checklist in Summary.
+3. Work through the checklist — typically GPU driver, chipset package, and any vendor tools.
 
-**SSH Keys**
+VERIFY never modifies the system and can be re-run any time.
 
-Captures:
+---
 
-- ~/.ssh folder (keys, known hosts)
+## 7. Reading the Output
 
-Applies:
+### 7.1 Warnings vs. Failures
 
-- Restores SSH access for Git, servers, automation
+Most log lines are informational. The classic example:
 
-Example:
+> *"Installed package is not available from any source"*
 
-"I need my SSH keys for GitHub and servers."
+This means Winget detected the app but cannot reinstall it automatically — **nothing is broken**. WinGOES Pro records it so *you* know what to reinstall manually. Only entries marked **fatal** indicate a real failure.
 
-Enable **SSH**
+### 7.2 The Completion Badge
 
-**VS Code**
+At the end of every run the Summary tab shows either **✓ COMPLETED** (phosphor) or **⚠ COMPLETED WITH ISSUES** (red). "Issues" usually means best-effort items that need manual follow-up — check Step Results for the red rows, read their Message column, and act on anything genuinely fatal.
 
-Captures:
+### 7.3 Step Results Colour Code
 
-- Extensions list
-- Settings and keybindings
+| Colour | Meaning |
+|--------|---------|
+| Phosphor green **OK** | Item completed (or simulated) successfully |
+| Red **FAIL** | Item did not complete — read the message |
+| Grey | Informational / skipped |
 
-Applies:
+---
 
-- Re-installs extensions
-- Restores preferences
+## 8. Reports & the Bundle Folder
 
-Example:
+```
+my_bundle/
+├── fingerprints/          # source_/target_fingerprint.json
+├── packages/              # winget/choco/scoop exports + app inventory
+├── configs/               # git, ssh, vscode, terminal, settings
+├── drivers/               # inventory, checklist, optional DriverStore export
+└── runs/
+    └── <run_id>/
+        ├── report.json    # full machine-readable result
+        ├── summary.txt    # human-readable summary
+        └── run.log        # complete timestamped log
+```
 
-"I want VS Code to feel exactly the same on the new install."
+Every run — dry or real — writes a complete journal under `runs/`. **Open Report** in the action bar opens the most recent `report.json`; **File → Open Last Report** does the same.
 
-Enable **VS Code**
+---
 
-**Windows Terminal**
+## 9. Common Real-World Scenarios
 
-Captures:
+**Scenario 1 — New PC build.** Mode: CLEAN REBUILD. Enable Winget, Git, SSH, VS Code, Windows Terminal. CAPTURE on the old machine, APPLY + VERIFY on the new one. Result: clean Windows, dev environment restored, zero legacy baggage.
 
-- Terminal profiles
-- Appearance and behavior settings
+**Scenario 2 — Same PC, fresh Windows.** Mode: SAME-HARDWARE TRANSFER. Enable the extras you want (timezone, power plan); the fingerprint match unlocks them automatically. Everything else as Scenario 1.
 
-Applies:
+**Scenario 3 — "I just want a checklist."** Enable Driver inventory + Post-install checklist only, run CAPTURE, and use the files in `drivers/` and `packages/` as a manual rebuild reference. You never need to run APPLY at all.
 
-- Restores terminal configuration
+**Scenario 4 — Family PC rescue.** CLEAN REBUILD with Winget only. Capture, reinstall Windows, Apply. The post-install checklist tells you which vendor drivers to fetch. Ten minutes of clicking replaced by one bundle.
 
-**5.3 Windows Settings (Safe Allowlist)**
+---
 
-These are **safe, reversible settings**.
+## 10. Troubleshooting & FAQ
 
-**Timezone**
+**The Apply/Verify extras are greyed out.** Working as intended — you're in CLEAN REBUILD, or the hardware fingerprint didn't return PASS. The amber note under the toggle explains which.
 
-Captures and restores your timezone
+**The admin badge shows ⚠ Admin.** Some captures (driver inventory, DriverStore export) and applies work best elevated. Close and relaunch WinGOES Pro as administrator.
 
-**Power Plan**
+**"COMPLETED WITH ISSUES" after Apply.** Open Step Results, filter your eyes to the red rows. Most are best-effort package installs that need a manual download; genuine failures say *fatal* in the log.
 
-Restores your preferred power profile (Balanced, High Performance, etc.)
+**My license key isn't accepted.** Check for typos — keys are 25 characters in five groups, letters and digits from the Base32 alphabet (no `0`, `1`, `8`, `9`). The dialog reports whether the format or the checksum failed.
 
-In **CLEAN REBUILD**, these are often disabled by default to avoid unintended side effects.
+**Can I use one bundle on several machines?** Yes for CLEAN REBUILD content (apps, configs). The gated extras will simply be skipped on non-matching hardware.
 
-**5.4 Drivers (Handled Carefully)**
+**Does WinGOES Pro touch my browser passwords?** Never. Password migration is permanently blocked by policy, in every mode.
 
-WinGOES does **not** blindly copy drivers.
+---
 
-What it can do:
+## 11. Best Practices
 
-- Capture a **driver inventory**
-- Produce a **post-install checklist**
+- **CLEAN REBUILD is the safest choice** — reach for the other modes only with a reason.
+- Keep the bundle backed up in **two** places before wiping a machine.
+- Always Dry Run an Apply first; it costs one click and shows you everything.
+- Read the VERIFY checklist to the end — it exists so nothing gets forgotten.
+- Logs are your friend, not a sign of failure.
 
-What it will not do (by default):
+---
 
-- Copy drivers between machines
-- Force old drivers onto new hardware
+## Appendix A — CLI Reference
 
-Example:
+All GUI operations are available headless:
 
-"I want to know what drivers I had, not copy them blindly."
+```bash
+# Operations
+python gui_app.py --cli capture --bundle C:\MyBundle --mode CLEAN_REBUILD --dry-run
+python gui_app.py --cli apply   --bundle C:\MyBundle --mode CLEAN_REBUILD
+python gui_app.py --cli verify  --bundle C:\MyBundle
 
-Enable **Driver Inventory**
+# Toggle flags (defaults mirror the GUI)
+--no-winget --choco --scoop
+--no-git --no-gitconfig --no-ssh --no-vscode --no-terminal
+--tz-region --power-plan
+--no-driver-inventory --no-driver-checklist --driver-transfer
 
-**6\. Action Buttons (The Workflow)**
+# License tooling (developer use — not for retail builds)
+python gui_app.py --cli --genkey PRO
+python gui_app.py --cli --validate-key WGPRO-XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+```
 
-**6.1 CAPTURE**
+Exit codes: `0` success, `1` completed with failed items, `2` usage error.
 
-**When to use:**  
-Before reinstalling Windows.
+## Appendix B — Safety Policy Summary
 
-What happens:
+Enforced in the engine regardless of UI state:
 
-- System snapshot is taken
-- Selected data is saved into a **bundle folder**
-- Nothing is changed on your system
+| Action | Policy |
+|--------|--------|
+| Raw registry import/export | **Never** |
+| Browser passwords/cookies | **Never** |
+| Shell/context-menu handler migration | **Never** |
+| Silent downloads | **Never** |
+| Windows settings transfer | SAME-HW / CUSTOM + hardware PASS only |
+| DriverStore transfer | SAME-HW / CUSTOM + hardware PASS + explicit toggle |
+| Dry Run default | **ON** |
+| Real Apply | Requires explicit confirmation dialog |
 
-Example workflow:
+---
 
-- Launch WinGOES
-- Select CLEAN REBUILD
-- Enable desired toggles
-- Click **CAPTURE**
-- Copy the bundle folder to external storage
-
-**6.2 APPLY**
-
-**When to use:**  
-After installing fresh Windows.
-
-What happens:
-
-- Hardware fingerprint is checked
-- Safe items are restored
-- Apps are reinstalled where possible
-- Risky actions are blocked automatically
-
-You can use **Dry Run** mode to see what _would_ happen without changing anything.
-
-Example:
-
-"I want to see what WinGOES will do before it does it."
-
-Enable **Dry Run**, then click **APPLY**
-
-**6.3 VERIFY**
-
-**When to use:**  
-After APPLY is finished.
-
-What happens:
-
-- Confirms system health
-- Checks key tools are present
-- Generates a readiness checklist (especially for drivers)
-
-Example:
-
-"Did everything install correctly? What do I still need to do manually?"
-
-Click **VERIFY**
-
-**7\. The Live Log Panel (What You're Seeing Scroll)**
-
-The log shows:
-
-- What WinGOES is doing
-- What it skips (and why)
-- What succeeds
-- What requires manual attention
-
-**Important: Warnings vs Errors**
-
-Many messages look scary but are **informational**, not failures.
-
-Example:
-
-"Installed package is not available from any source"
-
-This means:
-
-- Winget detected the app
-- Winget cannot reinstall it automatically
-- **Nothing is broken**
-
-WinGOES records this so _you_ know what needs manual reinstall.
-
-**8\. Common Real-World Scenarios**
-
-**Scenario 1: New PC Build**
-
-- Mode: CLEAN REBUILD
-- Enable: Winget, Git, SSH, VS Code
-- CAPTURE on old PC
-- APPLY on new PC
-- VERIFY
-
-Result:
-
-- Clean Windows
-- Dev environment restored
-- No legacy issues
-
-**Scenario 2: Same PC, Fresh Windows**
-
-- Mode: SAME-HARDWARE TRANSFER
-- Enable extra options if needed
-- Hardware fingerprint ensures safety
-
-**Scenario 3: "I Just Want a Checklist"**
-
-- Enable minimal toggles
-- CAPTURE only
-- Use inventory files as a reference
-
-**9\. Final Notes & Best Practices**
-
-- **CLEAN REBUILD is the safest choice**
-- WinGOES intentionally refuses dangerous actions
-- Logs are your friend, not a sign of failure
-- Use Dry Run when unsure
-
-**Windows 10 Pro Rebuild & Migration Assistant**
-
-**1\. What WinGOES Is (and What It Is Not)**
-
-**WinGOES** is a guided assistant that helps you **safely rebuild or re-set up Windows 10 Pro** without dragging along old problems.
-
-It is designed around one core idea:
-
-**A clean Windows install is usually best - but your useful setup should not be lost.**
-
-WinGOES lets you:
-
-- Capture a snapshot of your current system
-- Reinstall Windows cleanly
-- Re-apply _only the safe, intentional parts_ of your setup
-
-**WinGOES is NOT:**
-
-- A full disk imaging or cloning tool
-- A "restore everything exactly as it was" utility
-- A risky driver-migration or registry-copying tool
-
-This is intentional. WinGOES prioritizes **stability, clarity, and control** over convenience shortcuts.
-
-**2\. Core Concepts (Plain English)**
-
-Before using the GUI, it helps to understand three simple ideas.
-
-**2.1 Capture → Apply → Verify**
-
-WinGOES works in **three stages**:
-
-- **CAPTURE**  
-    Records what _can_ be safely re-applied later
-- **APPLY**  
-    Re-applies selected items to a fresh Windows install
-- **VERIFY**  
-    Confirms that your new system is healthy and ready
-
-You can run these stages on different days and even different machines.
-
-**2.2 Migration Modes (Very Important)**
-
-WinGOES always operates in **one of three modes**.  
-The mode determines what the tool will _allow_ and what it will _refuse_ to do.
-
-**CLEAN REBUILD (Default - Recommended)**
-
-Use when:
-
-- You are reinstalling Windows fresh
-- You want to eliminate old Windows issues
-- You are moving to new hardware
-
-What it does:
-
-- Re-installs apps where possible
-- Restores selected user tools and preferences
-- **Blocks risky actions** (driver copying, system tweaks)
-
-This is the safest and most common mode.
-
-**SAME-HARDWARE TRANSFER (Advanced)**
-
-Use only when:
-
-- You are reinstalling Windows on **the same physical machine**
-- You understand the risks
-
-What it does:
-
-- Allows more system-level restoration
-- Still blocks known dangerous operations
-- Requires hardware fingerprint matching
-
-If the hardware does not match, WinGOES will automatically downgrade behavior.
-
-**CUSTOM (Expert Use)**
-
-Use when:
-
-- You want full manual control
-- You accept responsibility for advanced choices
-
-Even in Custom mode, **WinGOES will still block actions known to cause system instability**.
-
-**2.3 Hardware Fingerprints (Automatic Safety Check)**
-
-WinGOES automatically creates a **hardware fingerprint**:
-
-- CPU
-- Motherboard
-- Storage identity
-
-This fingerprint is used to:
-
-- Detect whether APPLY is happening on the same hardware
-- Prevent unsafe driver or system transfers
-
-You do **not** need to configure this. It is automatic.
-
-**3\. The Main GUI Layout**
-
-The WinGOES GUI is intentionally simple and linear.
-
-You will typically see:
-
-- **Mode Selection**
-- **Feature Toggles**
-- **Action Buttons** (CAPTURE / APPLY / VERIFY)
-- **Live Log Panel**
-
-**4\. Mode Selection (Top Section)**
-
-**What This Does**
-
-This determines the **rules** WinGOES will follow.
-
-**How to Use It**
-
-- Choose **CLEAN REBUILD** unless you have a very specific reason not to
-- SAME-HARDWARE TRANSFER should only be selected if:
-  - You are reinstalling Windows on the same PC
-  - You understand that some system risks increase
-
-**Example**
-
-"I'm building a new PC and want my dev tools back, but none of the old Windows weirdness."
-
-→ **CLEAN REBUILD**
-
-**5\. Feature Toggles (What Gets Captured / Applied)**
-
-Each toggle represents a **category of information**.
-
-If a toggle is disabled by your selected mode, the GUI will show it as unavailable.
-
-**5.1 Applications (Package Managers)**
-
-**Winget**
-
-Captures:
-
-- Apps installed via Windows Package Manager
-- App versions where available
-
-Applies:
-
-- Re-installs those apps automatically where possible
-
-Important:
-
-- Some apps cannot be reinstalled automatically (games, vendor installers, Microsoft Store apps)
-- WinGOES records these safely but does not force reinstallation
-
-**Example**
-
-"I want my dev tools, browsers, and utilities back automatically."
-
-Enable **Winget**
-
-**Chocolatey / Scoop**
-
-Same concept as Winget, for users who use these ecosystems.
-
-Enable only if you actually use them.
-
-**5.2 Developer & Power-User Tools**
-
-**Git Configuration**
-
-Captures:
-
-- Global Git settings
-- Optional .gitconfig file
-
-Applies:
-
-- Restores your Git identity and preferences
-
-Example:
-
-"I don't want to reconfigure Git name/email on a new install."
-
-Enable **Git**
-
-**SSH Keys**
-
-Captures:
-
-- ~/.ssh folder (keys, known hosts)
-
-Applies:
-
-- Restores SSH access for Git, servers, automation
-
-Example:
-
-"I need my SSH keys for GitHub and servers."
-
-Enable **SSH**
-
-**VS Code**
-
-Captures:
-
-- Extensions list
-- Settings and keybindings
-
-Applies:
-
-- Re-installs extensions
-- Restores preferences
-
-Example:
-
-"I want VS Code to feel exactly the same on the new install."
-
-Enable **VS Code**
-
-**Windows Terminal**
-
-Captures:
-
-- Terminal profiles
-- Appearance and behavior settings
-
-Applies:
-
-- Restores terminal configuration
-
-**5.3 Windows Settings (Safe Allowlist)**
-
-These are **safe, reversible settings**.
-
-**Timezone**
-
-Captures and restores your timezone
-
-**Power Plan**
-
-Restores your preferred power profile (Balanced, High Performance, etc.)
-
-In **CLEAN REBUILD**, these are often disabled by default to avoid unintended side effects.
-
-**5.4 Drivers (Handled Carefully)**
-
-WinGOES does **not** blindly copy drivers.
-
-What it can do:
-
-- Capture a **driver inventory**
-- Produce a **post-install checklist**
-
-What it will not do (by default):
-
-- Copy drivers between machines
-- Force old drivers onto new hardware
-
-Example:
-
-"I want to know what drivers I had, not copy them blindly."
-
-Enable **Driver Inventory**
-
-**6\. Action Buttons (The Workflow)**
-
-**6.1 CAPTURE**
-
-**When to use:**  
-Before reinstalling Windows.
-
-What happens:
-
-- System snapshot is taken
-- Selected data is saved into a **bundle folder**
-- Nothing is changed on your system
-
-Example workflow:
-
-- Launch WinGOES
-- Select CLEAN REBUILD
-- Enable desired toggles
-- Click **CAPTURE**
-- Copy the bundle folder to external storage
-
-**6.2 APPLY**
-
-**When to use:**  
-After installing fresh Windows.
-
-What happens:
-
-- Hardware fingerprint is checked
-- Safe items are restored
-- Apps are reinstalled where possible
-- Risky actions are blocked automatically
-
-You can use **Dry Run** mode to see what _would_ happen without changing anything.
-
-Example:
-
-"I want to see what WinGOES will do before it does it."
-
-Enable **Dry Run**, then click **APPLY**
-
-**6.3 VERIFY**
-
-**When to use:**  
-After APPLY is finished.
-
-What happens:
-
-- Confirms system health
-- Checks key tools are present
-- Generates a readiness checklist (especially for drivers)
-
-Example:
-
-"Did everything install correctly? What do I still need to do manually?"
-
-Click **VERIFY**
-
-**7\. The Live Log Panel (What You're Seeing Scroll)**
-
-The log shows:
-
-- What WinGOES is doing
-- What it skips (and why)
-- What succeeds
-- What requires manual attention
-
-**Important: Warnings vs Errors**
-
-Many messages look scary but are **informational**, not failures.
-
-Example:
-
-"Installed package is not available from any source"
-
-This means:
-
-- Winget detected the app
-- Winget cannot reinstall it automatically
-- **Nothing is broken**
-
-WinGOES records this so _you_ know what needs manual reinstall.
-
-**8\. Common Real-World Scenarios**
-
-**Scenario 1: New PC Build**
-
-- Mode: CLEAN REBUILD
-- Enable: Winget, Git, SSH, VS Code
-- CAPTURE on old PC
-- APPLY on new PC
-- VERIFY
-
-Result:
-
-- Clean Windows
-- Dev environment restored
-- No legacy issues
-
-**Scenario 2: Same PC, Fresh Windows**
-
-- Mode: SAME-HARDWARE TRANSFER
-- Enable extra options if needed
-- Hardware fingerprint ensures safety
-
-**Scenario 3: "I Just Want a Checklist"**
-
-- Enable minimal toggles
-- CAPTURE only
-- Use inventory files as a reference
-
-**9\. Final Notes & Best Practices**
-
-- **CLEAN REBUILD is the safest choice**
-- WinGOES intentionally refuses dangerous actions
-- Logs are your friend, not a sign of failure
-- Use Dry Run when unsure
+*WinGOES Pro — Safety-first. Every action explicit, logged, and reversible.*

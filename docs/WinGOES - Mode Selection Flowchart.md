@@ -1,105 +1,107 @@
-# WinGOES – Mode Selection Flowchart
-### Which Mode Should I Use?
-```text
-┌──────────────────────────────────────────────┐
-│ Are you reinstalling Windows 10 Pro?         │
-└──────────────────────────────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────────┐
-│ Do you want to remove old Windows problems?  │
-│ (context menu bugs, weird settings, issues) │
-└──────────────────────────────────────────────┘
-           │ YES                                │ NO / NOT SURE
-           ▼                                    ▼
-┌──────────────────────────────────────────────┐
-│ Are you changing hardware (new PC, new MB)? │
-└──────────────────────────────────────────────┘
-           │ YES                                │ NO / SAME PC
-           ▼                                    ▼
-┌───────────────────────────────┐      ┌───────────────────────────────┐
-│   ✅ CLEAN REBUILD             │      │ Do you need system-level       │
-│   (RECOMMENDED)               │      │ settings or driver carry-over? │
-└───────────────────────────────┘      └───────────────────────────────┘
-                                                   │ NO
-                                                   ▼
-                                      ┌───────────────────────────────┐
-                                      │   ✅ CLEAN REBUILD             │
-                                      │   (Still Recommended)         │
-                                      └───────────────────────────────┘
-                                                   │ YES
-                                                   ▼
-┌──────────────────────────────────────────────┐
-│ Are you reinstalling on the EXACT same PC?   │
-│ (same motherboard, CPU, system identity)    │
-└──────────────────────────────────────────────┘
-                     │ YES
-                     ▼
-┌──────────────────────────────────────────────┐
-│ Are you comfortable with advanced options    │
-│ and understand driver/system risks?          │
-└──────────────────────────────────────────────┘
-           │ YES                                │ NO
-           ▼                                    ▼
-┌───────────────────────────────┐      ┌───────────────────────────────┐
-│ ⚠️ SAME-HARDWARE TRANSFER      │      │   ✅ CLEAN REBUILD             │
-│ (ADVANCED)                    │      │   (SAFER CHOICE)              │
-└───────────────────────────────┘      └───────────────────────────────┘
+# WinGOES Pro — Mode Selection Guide
+
+| | |
+|---|---|
+| **Product** | WinGOES Pro 2.1 |
+| **Document** | Mode Selection Guide, Rev. 2 |
+
+---
+
+## Which Mode Should I Use?
+
+```mermaid
+flowchart TD
+    A[Reinstalling Windows?] --> B{Changing hardware?<br/>new PC / new motherboard}
+    B -- YES --> CLEAN1[✅ CLEAN REBUILD<br/>Recommended]
+    B -- "NO — same PC" --> C{Need system-level settings<br/>or driver carry-over?}
+    C -- NO --> CLEAN2[✅ CLEAN REBUILD<br/>Still recommended]
+    C -- YES --> D{Reinstalling on the<br/>EXACT same machine?<br/>same board, CPU, identity}
+    D -- "NO / not sure" --> CLEAN3[✅ CLEAN REBUILD<br/>Safer choice]
+    D -- YES --> E{Comfortable with advanced<br/>options and driver risks?}
+    E -- NO --> CLEAN4[✅ CLEAN REBUILD<br/>Safer choice]
+    E -- YES --> SAME[⚠️ SAME-HARDWARE TRANSFER<br/>Advanced]
+
+    style CLEAN1 fill:#0c1f14,stroke:#4be08a,color:#4be08a
+    style CLEAN2 fill:#0c1f14,stroke:#4be08a,color:#4be08a
+    style CLEAN3 fill:#0c1f14,stroke:#4be08a,color:#4be08a
+    style CLEAN4 fill:#0c1f14,stroke:#4be08a,color:#4be08a
+    style SAME fill:#1f1608,stroke:#ffb454,color:#ffb454
 ```
+
+Plain-text version (for offline reading):
+
+```text
+Reinstalling Windows?
+ │
+ ├─ Changing hardware (new PC / new motherboard)?
+ │   └─ YES ─────────────────────────────► ✅ CLEAN REBUILD (recommended)
+ │
+ └─ NO — same PC
+     │
+     ├─ Need system-level settings or driver carry-over?
+     │   └─ NO ──────────────────────────► ✅ CLEAN REBUILD (still recommended)
+     │
+     └─ YES
+         │
+         ├─ EXACT same machine (board, CPU, system identity)?
+         │   └─ NO / NOT SURE ───────────► ✅ CLEAN REBUILD (safer choice)
+         │
+         └─ YES
+             │
+             ├─ Comfortable with advanced options and driver risks?
+             │   └─ NO ──────────────────► ✅ CLEAN REBUILD (safer choice)
+             │
+             └─ YES ─────────────────────► ⚠️ SAME-HARDWARE TRANSFER (advanced)
+```
+
 ---
 
 ## Mode Summary (Quick Reference)
-##✅ CLEAN REBUILD (Default – Recommended)
 
-Use when:
+### ✅ CLEAN REBUILD *(default — recommended)*
 
-- New PC or upgraded hardware
-- Fresh Windows install
-- You want to eliminate old Windows issues
-- You are unsure which mode to choose
+| Use when | What it does |
+|----------|--------------|
+| New PC or upgraded hardware | Reinstalls apps where possible |
+| Fresh Windows install | Restores safe, portable configs |
+| Eliminating old Windows issues | **Blocks** risky system migrations |
+| You are unsure which mode to pick | Windows-settings and driver-transfer toggles are disabled by policy |
 
-What it does:
+### ⚠️ SAME-HARDWARE TRANSFER *(advanced)*
 
-- Reinstalls apps where possible
-- Restores safe, portable configs
-- Blocks risky system migrations
+| Use only when | What it allows |
+|---------------|----------------|
+| Reinstalling on the **same physical machine** | Timezone/region and power-plan restore |
+| Hardware fingerprint matches (**PASS**) | DriverStore transfer (gated, opt-in) |
+| You understand the risks | Everything CLEAN REBUILD does |
 
----
+If the hardware fingerprint does **not** match, WinGOES Pro automatically disables the risky features — the engine enforces this even if the UI toggles were on.
 
-⚠️ SAME-HARDWARE TRANSFER (Advanced)
+### 🧪 CUSTOM *(expert use only)*
 
-Use only when:
-
-- Reinstalling Windows on the same physical machine
-- Hardware fingerprint matches
-- You understand the risks
-
-What it allows:
-
-- Limited system settings restoration
-- Advanced options (still gated and safety-checked)
-
-If hardware does not match:
-
-- WinGOES automatically disables risky features
+Full manual control over toggles, with responsibility on you. Even in CUSTOM: known-dangerous actions (raw registry import, browser passwords, shell-extension migration) remain **permanently blocked**, and driver transfer still requires a hardware-match **PASS**.
 
 ---
 
-## 🧪 CUSTOM (Expert Use Only)
+## How the Hardware Gate Works
 
-Use when:
+During CAPTURE, WinGOES Pro records a fingerprint of your machine (baseboard, CPU, BIOS identity, GPUs, NICs). During APPLY and VERIFY it fingerprints the current machine and classifies the match:
 
-- You want full manual control
-- You accept responsibility for advanced decisions
+| Match | Meaning | Effect |
+|-------|---------|--------|
+| **PASS** | Same board + CPU, overlapping NICs | Gated features permitted (if enabled) |
+| **PARTIAL** | Some identity overlap | Gated features disabled |
+| **FAIL / UNKNOWN** | Different machine or no source fingerprint | Gated features disabled |
 
-Even in CUSTOM mode:
-
-- Known dangerous actions remain blocked
-- Safety gates still apply
+You never configure this — it is automatic and cannot be overridden from the UI.
 
 ---
 
 ## Golden Rule
 
-If you ever hesitate, choose CLEAN REBUILD.
-It is always safe, always supported, and always reversible.
+> **If you ever hesitate, choose CLEAN REBUILD.**
+> It is always safe, always supported, and never carries old problems forward.
+
+---
+
+*Copyright © 2026 Leon Priest (7h3v01d) • Apache License 2.0*
