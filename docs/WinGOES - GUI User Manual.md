@@ -11,8 +11,6 @@
 
 ---
 
-<img width="1362" height="892" alt="screenshot" src="https://github.com/user-attachments/assets/084c1c96-bd35-46bc-a64c-83ccfa4a8b1d" />
-
 ## Contents
 
 1. [What WinGOES Pro Is (and What It Is Not)](#1-what-wingoes-pro-is-and-what-it-is-not)
