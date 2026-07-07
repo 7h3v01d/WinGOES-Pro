@@ -8,6 +8,9 @@ WinGOES Pro captures your essential setup, lets you install Windows fresh, then 
 
 ---
 
+<img width="1362" height="892" alt="screenshot" src="https://github.com/user-attachments/assets/70aac1e8-481c-4657-afaf-a4d450a6cbfb" />
+
+
 ## What's New in 2.1
 
 - **Dark-industrial theme** — full visual redesign: obsidian base, teal accent, phosphor/amber/red status colours, JetBrains Mono typography, flat zero-radius controls, 1px steel hairlines
